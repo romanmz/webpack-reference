@@ -1,0 +1,25 @@
+{
+  "name": "webpack-reference",
+  "version": "1.0.0",
+  "description": "Webpack reference",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prod": "webpack --mode=production",
+    "dev": "webpack --mode=development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/romanmz/webpack-reference.git"
+  },
+  "author": "Roman Martinez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/romanmz/webpack-reference/issues"
+  },
+  "homepage": "https://github.com/romanmz/webpack-reference#readme",
+  "devDependencies": {
+    "webpack": "^4.8.3",
+    "webpack-cli": "^2.1.3",
+  }
+}
