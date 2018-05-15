@@ -171,8 +171,8 @@ When defining the output filenames:
 see: https://webpack.js.org/configuration/output/#output-filename
 */
 webpackConfig.entry = {
-	app1: './src/index.js',
-	app2: ['./src/index2.js', './src/index3.js'],
+	main: './src/index.js',
+	home: ['./src/home1.js', './src/home2.js'],
 }
 webpackConfig.output = {
 	filename: '[name].js',
@@ -201,6 +201,40 @@ const babelModule = {
 	},
 };
 webpackConfig.module.rules.push( babelModule );
+/*
 
-// Finally, export the configuration object to make it available for other scripts:
+
+Live Reloading / Hot Module Replacement
+------------------------------
+1. Install webpack dev server
+$ npm i --save-dev webpack-dev-server
+
+2. Configure the server settings, including the HMR plugin if necessary
+*/
+const webpack = require('webpack');
+webpackConfig.devServer = {
+	contentBase: './dist',				// should point to the web root folder
+	hot: true,							// enable hot module replacement
+	inline: true,						// if hmr fails, then reload the full page
+};
+webpackConfig.plugins.push( new webpack.HotModuleReplacementPlugin() );
+/*
+
+3. If you want to use hot module replacement, use the js methods made available in the module.hot object
+- see the ./src/index.js file for examples
+
+4. Add a new shortcut in package.json to call the dev server
+"scripts": {
+	"server": "webpack-dev-server --mode=development --open"
+},
+
+5. Finally, run the server
+$ npm run server
+
+
+Export Config Settings
+------------------------------
+Finally, export the configuration object to make it available for other scripts:
+*/
+webpackConfig.devtool = 'source-map';
 module.exports = webpackConfig;
