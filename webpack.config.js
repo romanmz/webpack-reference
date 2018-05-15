@@ -100,12 +100,12 @@ Node.js imports
 On Node.js there's a reserved 'module' object available on every file,
 use the 'exports' property of that object to define the data or elements that should be made available for other modules that import the file.
 
-module.exports = myElement;					// exports a single element, if you replace the 'exports' property multiple times in the same file only the last value will be used
-module.exports.foo = {};					// by default 'exports' is an object, so you can export multiple elements by adding them as properties
+module.exports = myElement;					exports a single element, if you replace the 'exports' property multiple times in the same file only the last value will be used
+module.exports.foo = {};					by default 'exports' is an object, so you can export multiple elements by adding them as properties
 
-const single = require('./single.js');		// imports a file containing a single element, and creates an alias to refer to it
+const single = require('./single.js');		imports a file containing a single element, and creates an alias to refer to it
 single();
-const multiple = require('./multiple.js');	// imports a file containing multiple elements, and creates an alias to refer to the object that contains them
+const multiple = require('./multiple.js');	imports a file containing multiple elements, and creates an alias to refer to the object that contains them
 multiple.foo();
 multiple.bar();
 
@@ -116,18 +116,68 @@ Since web browsers don't recognise Node's require statements, you need to use a 
 Another alternative is to use JavaScript's ES6 imports, those are not supported by older browsers,
 but you can run a code transpiler like Babel during the build process to convert the code to a syntax old browsers can recognise.
 
-export default myElement;					// exports a single element, you can only call this once per file otherwise you'll get an error
-export {foo, bar, myVar as baz};			// exports multiple elements, you can use existing elements and export them with a different name using the 'as' keyword
+export default myElement;					exports a single element, you can only call this once per file otherwise you'll get an error
+export {foo, bar, myVar as baz};			exports multiple elements, you can use existing elements and export them with a different name using the 'as' keyword
 
-import single from './single.js';			// imports a file containing a single element, and creates an alias to refer to it
+import single from './single.js';			imports a file containing a single element, and creates an alias to refer to it
 single();
-import * as multiple from './multiple.js';	// imports all the elements exported by a file, and stores them on an object with a given name
+import * as multiple from './multiple.js';	imports all the elements exported by a file, and stores them on an object with a given name
 multiple.foo();
 multiple.bar();
-import {foo, bar} from './multiple.js';		// imports only the listed elements, which will become accessible as top level elements
+import {foo, bar} from './multiple.js';		imports only the listed elements, which will become accessible as top level elements
 foo();
 bar();
-import {foo as loremipsum}					// when importing individual elements, you can assign them to an alias if you want to refer to them by a different name
+import {foo as loremipsum}					when importing individual elements, you can assign them to an alias if you want to refer to them by a different name
 loremipsum();
-import './multiple.js';						// you can also choose to execute the code from another file, without actually importing anything from it
+import './multiple.js';						you can also choose to execute the code from another file, without actually importing anything from it
+
+
+
+Webpack Configuration File
+==================================================
+Documentation: https://webpack.js.org/configuration/
+
+
+Structure
+------------------------------
 */
+const webpackConfig = {
+	target: 'web',							// instructs webpack to target a specific environment
+	entry: 'src/index.js',					// the file(s) that represent the entry point for the application
+	output: {
+		filename: 'main.js',				// the name to use for the final bundle file(s)
+		path: __dirname+'/dist',			// the target directory for the bundle files
+	},
+	module: {
+		rules: [],							// you can add 'module loaders' to run extra tasks (transpile css and js, etc)
+	},
+	plugins: [],							// you can add plugins to further process the generated files
+	devServer: {},							// the settings to use when running webpack-dev-server for live reloading/hot module replacement
+	devtool: 'eval',						// how source maps should be generated
+}
+/*
+
+
+Entry and output files
+------------------------------
+To define the entry files you can use:
+1. a string to define a single entry file
+2. an array for multiple files that should be bundled into a single file
+3. an object where keys represent each output file to be generated, and values represent the file(s) to be included on each file
+
+When defining the output filenames:
+- you can enter the exact name you want, e.g. 'main.js'
+- or you can use one of many available keywords, especially useful when you are outputting multiple files
+see: https://webpack.js.org/configuration/output/#output-filename
+*/
+webpackConfig.entry = {
+	app1: './src/index.js',
+	app2: ['./src/index2.js', './src/index3.js'],
+}
+webpackConfig.output = {
+	filename: '[name].js',
+	path: __dirname + '/dist',
+}
+
+// Finally, export the configuration object to make it available for other scripts:
+module.exports = webpackConfig;
