@@ -62,7 +62,7 @@
 /******/ 	}
 /******/
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "732d87643dd35c93de51"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "6a2ed850125812ab2dde"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -246,7 +246,7 @@
 /******/ 				};
 /******/ 			});
 /******/ 			hotUpdate = {};
-/******/ 			var chunkId = "home";
+/******/ 			var chunkId = "main";
 /******/ 			{
 /******/ 				// eslint-disable-line no-lone-blocks
 /******/ 				/*globals chunkId */
@@ -761,14 +761,32 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return hotCreateRequire(0)(__webpack_require__.s = 0);
+/******/ 	return hotCreateRequire("./src/index.js")(__webpack_require__.s = "./src/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/home1.js":
+/***/ "./src/export.js":
+/*!***********************!*\
+  !*** ./src/export.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var myValue = 10;
+exports.default = myValue;
+
+/***/ }),
+
+/***/ "./src/index.js":
 /*!**********************!*\
-  !*** ./src/home1.js ***!
+  !*** ./src/index.js ***!
   \**********************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -776,40 +794,40 @@
 "use strict";
 
 
-document.addEventListener('DOMContentLoaded', function () {
-	console.log('Document ready: home1.js');
-});
+var _export = __webpack_require__(/*! ./export.js */ "./src/export.js");
 
-/***/ }),
+var _export2 = _interopRequireDefault(_export);
 
-/***/ "./src/home2.js":
-/*!**********************!*\
-  !*** ./src/home2.js ***!
-  \**********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 document.addEventListener('DOMContentLoaded', function () {
-	console.log('Document ready: home2.js');
+	console.log('Document ready: index.js');
+	console.log('Imported data: ' + _export2.default);
 });
 
-/***/ }),
+// Hot Module Replacement
+// ------------------------------
+if (true) {
 
-/***/ 0:
-/*!*******************************************!*\
-  !*** multi ./src/home1.js ./src/home2.js ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+	// To detect when this same file is replaced:
+	// 1. run the 'accept' method with an empty function
+	module.hot.accept(function () {});
+	// 2. run the 'dispose' method, which runs right before the module is reloaded, and pass on persistent data to be made available on the next run (the object is reset every time)
+	module.hot.dispose(function (data) {
+		data.fileUpdated = 1;
+	});
+	// 3. check for the data set on the previous set, if it exists it means the module has just been reloaded
+	if (module.hot.data && module.hot.data.fileUpdated) {
+		console.log('File updated: index.js');
+	}
 
-__webpack_require__(/*! ./src/home1.js */"./src/home1.js");
-module.exports = __webpack_require__(/*! ./src/home2.js */"./src/home2.js");
-
+	// To detect when other files have been replaced, simply call the 'accept' method passing the path to the file as the first argument (only works for modules loaded by the current file):
+	module.hot.accept(/*! ./export.js */ "./src/export.js", function(__WEBPACK_OUTDATED_DEPENDENCIES__) { (function () {
+		console.log('File updated: export.js');
+	})(__WEBPACK_OUTDATED_DEPENDENCIES__); });
+}
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=home.js.map
+//# sourceMappingURL=main.6a2ed850125812ab2dde.js.map

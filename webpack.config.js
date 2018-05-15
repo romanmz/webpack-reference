@@ -204,6 +204,37 @@ webpackConfig.module.rules.push( babelModule );
 /*
 
 
+Transpiling SASS Files
+------------------------------
+???
+
+
+Auto-generating HTML
+------------------------------
+1. Install packages:
+$ npm i --save-dev clean-webpack-plugin		deletes an entire folder on each run
+$ npm i --save-dev html-webpack-plugin		auto-generates an html file with the correct <script> and <style> tags (useful for cache busting when using hashed file names)
+
+2. Configure webpack:
+*/
+
+// Update the output file name to include auto-generated hashes
+webpackConfig.output.filename = '[name].[hash].js';
+
+// Delete the entire 'dist' folder on each run
+const cleanWebpackPlugin = require('clean-webpack-plugin');
+webpackConfig.plugins.push( new cleanWebpackPlugin(['dist']) );
+
+// Use './src/index.html' as a template for generating the final html file, you can pass your own custom vars to make them available within the template
+// the generated file will automatically add the correct links to the hashed script files
+const htmlWebpackPlugin = require('html-webpack-plugin');
+webpackConfig.plugins.push( new htmlWebpackPlugin({
+	title: 'Webpack Reference',
+	template: './src/index.html',
+}) );
+/*
+
+
 Live Reloading / Hot Module Replacement
 ------------------------------
 1. Install webpack dev server
