@@ -141,7 +141,6 @@ Documentation: https://webpack.js.org/configuration/
 Structure
 ------------------------------
 */
-const webpack = require('webpack');
 const webpackConfig = {
 	target: 'web',							// instructs webpack to target a specific environment
 	entry: 'src/index.js',					// the file(s) that represent the entry point for the application
@@ -171,12 +170,17 @@ When defining the output filenames:
 - or you can use one of many available keywords, especially useful when you are outputting multiple files
 see: https://webpack.js.org/configuration/output/#output-filename
 */
+const webpack = require('webpack');
+const devMode = process.env.NODE_ENV !== 'production';
+const useHMR = process.env.NODE_ENV === 'local';
+const fileNames = devMode ? '[name]' : '[name].[hash]';
+
 webpackConfig.entry = {
 	main: './src/index.js',
 	home: ['./src/home1.js', './src/home2.js'],
 }
 webpackConfig.output = {
-	filename: '[name].js',
+	filename: fileNames+'.js',
 	path: __dirname+'/dist',
 }
 /*
@@ -252,6 +256,7 @@ const imagesCopy = {
 		loader: 'file-loader',
 		options: {
 			outputPath: 'images',
+			name: fileNames+'.[ext]',
 		}
 	},
 };
@@ -264,6 +269,7 @@ const fontsCopy = {
 		loader: 'file-loader',
 		options: {
 			outputPath: 'fonts',
+			name: fileNames+'.[ext]',
 		}
 	},
 }
@@ -273,7 +279,40 @@ webpackConfig.module.rules.push( fontsCopy );
 
 Transpiling SASS Files
 ------------------------------
-???
+$ npm i --save-dev css-loader				loader for css files (imports them as simple text strings)
+$ npm i --save-dev style-loader				embeds loaded css as <style> tags (using js), supports HMR
+$ npm i --save-dev mini-css-extract-plugin	outputs loaded css as separate files and adds the correct <link> tags on the generated html code
+$ npm i --save-dev node-sass sass-loader	transpiles scss/sass files into css (node-sass is required by sass-loader)
+*/
+const miniCssExtractPlugin = require('mini-css-extract-plugin');
+const cssLoader = {
+	test: /\.(css|sass|scss)$/,
+	include: __dirname+'/src',
+	use: [
+		useHMR ? 'style-loader' : miniCssExtractPlugin.loader,
+		{
+			loader: 'css-loader',
+			options: {
+				url: false,					// set to false to disable module loading of url() resources
+				import: true,				// set to false to disable module loading of @import statements
+				minimize: !devMode,			// set to true to minimze the css code. for extra settings check: http://cssnano.co/guides/presets/
+				sourceMap: devMode,			// set to true to generate source maps (warning: they can be slow and buggy)
+			}
+		},
+		{
+			loader: 'sass-loader',
+			options: {
+				outputStyle: 'expanded',	// nested*, expanded, compact, compressed
+			}
+		}
+	],
+};
+webpackConfig.module.rules.push( cssLoader );
+webpackConfig.plugins.push( new miniCssExtractPlugin({
+	filename: 'css/'+fileNames+'.css',
+	chunkFilename: devMode ? 'css/[id].css' : 'css/[id].[hash].css',
+}) );
+/*
 
 
 Auto-generating HTML
@@ -284,9 +323,6 @@ $ npm i --save-dev html-webpack-plugin		auto-generates an html file with the cor
 
 2. Configure webpack:
 */
-
-// Update the output file name to include auto-generated hashes
-webpackConfig.output.filename = '[name].[hash].js';
 
 // Delete the entire 'dist' folder on each run
 const cleanWebpackPlugin = require('clean-webpack-plugin');

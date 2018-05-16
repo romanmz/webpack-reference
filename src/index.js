@@ -7,6 +7,7 @@ import jsonData from './files/data.json';
 
 // Copying files
 import imageURL from './files/image.png';
+import cssStyles from './scss/styles.scss';
 
 document.addEventListener('DOMContentLoaded', function(){
 	console.log( 'Document ready: index.js' );
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	console.log( xmlData );
 	console.log( jsonData );
 	console.log( imageURL );
+	console.log( cssStyles );
 });
 
 
