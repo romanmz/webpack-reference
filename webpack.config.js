@@ -235,6 +235,42 @@ webpackConfig.module.rules.push( xmlLoader );
 3. In your js code simply call require() or import the same way you do with js files.
 
 
+Copying Files
+------------------------------
+There's also a generic file loader that allows you to grab files from the source folder, copy them to the output folder, and retrieve the final urls from within your js code.
+This can also be used to make any kind of files available for other loaders and plugins.
+
+1. Install the loader
+$ npm i --save-dev file-loader
+
+2. Add the module rules
+*/
+const imagesCopy = {
+	test: /\.(jpg|jpeg|png|gif|svg)$/,
+	include: __dirname+'/src/',
+	use: {
+		loader: 'file-loader',
+		options: {
+			outputPath: 'images',
+		}
+	},
+};
+webpackConfig.module.rules.push( imagesCopy );
+
+const fontsCopy = {
+	test: /\.(woff|woff2|eot|ttf|otf)$/,
+	include: __dirname+'/src/',
+	use: {
+		loader: 'file-loader',
+		options: {
+			outputPath: 'fonts',
+		}
+	},
+}
+webpackConfig.module.rules.push( fontsCopy );
+/*
+
+
 Transpiling SASS Files
 ------------------------------
 ???
