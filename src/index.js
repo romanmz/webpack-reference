@@ -1,7 +1,16 @@
 import importedData from './export.js';
+
+// Importing other file types
+import csvData from './files/data.csv';
+import xmlData from './files/data.xml';
+import jsonData from './files/data.json';
+
 document.addEventListener('DOMContentLoaded', function(){
 	console.log( 'Document ready: index.js' );
 	console.log( 'Imported data: '+importedData );
+	console.log( csvData );
+	console.log( xmlData );
+	console.log( jsonData );
 });
 
 

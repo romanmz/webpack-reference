@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notes>
+	<note id="1">
+		<to>Mary</to>
+		<from>John</from>
+		<heading>Reminder</heading>
+		<body>Call Cindy on Tuesday</body>
+	</note>
+	<note id="2">
+		<to>Alex</to>
+		<from>Maria</from>
+		<heading>Invitation</heading>
+		<body>Birthday party on Friday</body>
+	</note>
+</notes>

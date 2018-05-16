@@ -141,6 +141,7 @@ Documentation: https://webpack.js.org/configuration/
 Structure
 ------------------------------
 */
+const webpack = require('webpack');
 const webpackConfig = {
 	target: 'web',							// instructs webpack to target a specific environment
 	entry: 'src/index.js',					// the file(s) that represent the entry point for the application
@@ -176,7 +177,7 @@ webpackConfig.entry = {
 }
 webpackConfig.output = {
 	filename: '[name].js',
-	path: __dirname + '/dist',
+	path: __dirname+'/dist',
 }
 /*
 
@@ -202,6 +203,36 @@ const babelModule = {
 };
 webpackConfig.module.rules.push( babelModule );
 /*
+
+
+Importing Non-JS Files
+------------------------------
+It's possible to load file types other than .js to read and manipulate their contents with js code,
+to do this you need to install and configure the appropiate module loaders for the file types you need.
+
+1. Install the loaders
+$ npm i --save-dev csv-loader
+$ npm i --save-dev xml-loader
+json files are supported out of the box
+
+2. Add the module rules
+*/
+const csvLoader = {
+	test: /\.csv$/,
+	include: __dirname+'/src',
+	use: ['csv-loader'],
+};
+webpackConfig.module.rules.push( csvLoader );
+
+const xmlLoader = {
+	test: /\.xml$/,
+	include: __dirname+'/src',
+	use: ['xml-loader'],
+};
+webpackConfig.module.rules.push( xmlLoader );
+/*
+
+3. In your js code simply call require() or import the same way you do with js files.
 
 
 Transpiling SASS Files
@@ -242,7 +273,6 @@ $ npm i --save-dev webpack-dev-server
 
 2. Configure the server settings, including the HMR plugin if necessary
 */
-const webpack = require('webpack');
 webpackConfig.devServer = {
 	contentBase: './dist',				// should point to the web root folder
 	hot: true,							// enable hot module replacement
