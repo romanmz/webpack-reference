@@ -377,6 +377,29 @@ but modules loaded with 'import()' are meant to be asynchronous, so they always 
 2. by default the file names follow the same rules as entry files, except that [name] is replaced with [id]. You can customize this under output.chunkFilename
 	!!! at least according to the documentation but for me it's just replacing all filenames including the entry files ???
 
+### Asynchronous modules - Extra webpack settings
+Within each import() call you can pass extra parameters that webpack understands.
+Since these parameters are not standard, they need to go inside a js comment like this: import(/* webpackChunkName: 'chunk-name' *\/ 'module-name')
+you can add multiple parameters inside the same comment line by separating them with a comma.
+
+webpackChunkName: 'chunk-name'				Replace the standard id number with a custom name for the chunk. You can use the keywords:
+											[index]		increment number
+											[request]	resolved filename
+webpackMode: 'lazy'							Defines whether or not to send a network request for the module
+											lazy		lazy-loads the chunk on every import() call. Default setting
+											lazy-once	lazy-loads the chunk only once and reuses it for all future import() calls
+											eager		doesn't create a separate chunk, the code gets injected into the requesting file
+											weak		only loads the module if it has already been loaded before, otherwise it fails. Never sends new network requests
+webpackPrefetch: true						Whether or not to 'prefetch' the module (loads it in advance with low priority, during idle time)
+webpackPreload: true						Whether or not to 'preload' the module (loads it in advance with medium priority, at the same time as the initial scripts)
+
+you can use variables to dynamically select the modules to load, e.g. import(`./locale/${language}.json`), which causes this behaviour:
+- the path needs to be specific, not variable, otherwise you'll get an error
+- webpack will bundle together ALL files that can potentially match that path, even if some end up not actually being used (there's no way for webpack to know this in advance)
+- to trim down the number of modules bundled in the chunk, use the following settings:
+
+webpackInclude: regex						include only modules that match the regex
+webpackExclude: regex						exclude modules that match the regex
 
 
 Live Reloading / Hot Module Replacement

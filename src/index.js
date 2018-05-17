@@ -10,7 +10,7 @@ import imageURL from './files/image.png';
 import cssStyles from './scss/styles.scss';
 
 document.addEventListener('DOMContentLoaded', function(){
-	import('lodash').then( lodash=>{
+	import(/* webpackChunkName: 'lodash' */ 'lodash').then( lodash=>{
 		console.log( 'Document ready: index.js' );
 		console.log( 'Imported data: '+importedData );
 		console.log( csvData );
