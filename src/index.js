@@ -1,4 +1,3 @@
-import lodash from 'lodash';
 import importedData from './export.js';
 
 // Importing other file types
@@ -11,14 +10,16 @@ import imageURL from './files/image.png';
 import cssStyles from './scss/styles.scss';
 
 document.addEventListener('DOMContentLoaded', function(){
-	console.log( 'Document ready: index.js' );
-	console.log( 'Imported data: '+importedData );
-	console.log( csvData );
-	console.log( xmlData );
-	console.log( jsonData );
-	console.log( imageURL );
-	console.log( cssStyles );
-	console.log( lodash.zip( [1, 2], ['one', 'two'], ['uno', 'dos'] ) );
+	import('lodash').then( lodash=>{
+		console.log( 'Document ready: index.js' );
+		console.log( 'Imported data: '+importedData );
+		console.log( csvData );
+		console.log( xmlData );
+		console.log( jsonData );
+		console.log( imageURL );
+		console.log( cssStyles );
+		console.log( lodash.default.zip( [1, 2], ['one', 'two'], ['uno', 'dos'] ) );
+	});
 });
 
 

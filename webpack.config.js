@@ -169,7 +169,12 @@ To define the entry files you can use:
 When defining the output filenames:
 - you can enter the exact name you want, e.g. 'main.js'
 - or you can use one of many available keywords, especially useful when you are outputting multiple files
-see: https://webpack.js.org/configuration/output/#output-filename
+	[name]									entry name
+	[hash]									build hash (updated every time the project source code changes)
+	[chunkhash]								chunk hash (updated only when the content of the chunk itself changes)
+	[id]									unique module number
+	[query]
+	Documentation: https://webpack.js.org/configuration/output/#output-filename
 */
 const webpack = require('webpack');
 const devMode = process.env.NODE_ENV !== 'production';
@@ -193,6 +198,7 @@ Transpiling ES6+ JavaScript
 $ npm i --save-dev babel-core				Babel's core functionality for Node.js
 $ npm i --save-dev babel-loader				loader to integrate it with webpack
 $ npm i --save-dev babel-preset-env			preset settings defining which new js features to transpile, and which ones to leave out
+$ npm i --save-dev babel-plugin-syntax-dynamic-import		adds support for import() functions (for asynchronous module loading)
 
 2. Add a module rule
 */
@@ -203,6 +209,7 @@ const babelModule = {
 		loader: 'babel-loader',
 		options: {
 			presets: ['env'],
+			plugins: ['syntax-dynamic-import'],
 		},
 	},
 };
@@ -341,10 +348,15 @@ webpackConfig.plugins.push( new htmlWebpackPlugin({
 
 Common Chunks
 ------------------------------
-https://webpack.js.org/configuration/optimization/
-https://webpack.js.org/plugins/split-chunks-plugin/#optimization-splitchunks
+A 'chunk' refers to one or more scripts bundled together and output as files separate from the main entry files.
+This is useful to:
+- make modules available for asynchronous loading
+- prevent code duplication when the same module is reused on different files (by default the whole module code is repeated on each file that uses it)
+- separate vendor libraries from your own code, which lets you apply different cache busting rules (vendor code usually changes less often and can be cached for longer)
+Documentation: https://webpack.js.org/configuration/optimization/
+Documentation: https://webpack.js.org/plugins/split-chunks-plugin/#optimization-splitchunks
 
-### Webpack Runtime
+### Webpack runtime
 All entry files include a copy of the webpack bootstrap code (which makes module loading possible).
 You can choose to output it as a separate file (reduces file size but increases requested files) by setting the 'optimization.runtimeChunk' option:
 
@@ -355,6 +367,16 @@ true										Enabled, creates a separate file for every single entry file
 */
 webpackConfig.optimization.runtimeChunk = 'single';
 /*
+
+### Asynchronous modules
+By default modules loaded with 'require()' and 'import' are synchronous and therefore are injected into the files that require them (unless you manually choose to output them as chunks),
+but modules loaded with 'import()' are meant to be asynchronous, so they always need to be output as separate chunks. This happens automatically and you only need to customize the settings:
+
+1. if you're transpiling js using Babel, you need to install the 'syntax-dynamic-import' plugin, otherwise import() statements will throw an error
+
+2. by default the file names follow the same rules as entry files, except that [name] is replaced with [id]. You can customize this under output.chunkFilename
+	!!! at least according to the documentation but for me it's just replacing all filenames including the entry files ???
+
 
 
 Live Reloading / Hot Module Replacement
