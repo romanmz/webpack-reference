@@ -342,6 +342,7 @@ const htmlWebpackPlugin = require('html-webpack-plugin');
 webpackConfig.plugins.push( new htmlWebpackPlugin({
 	title: 'Webpack Reference',
 	template: './src/index.html',
+	filename: 'index.html',
 }) );
 /*
 
@@ -375,7 +376,9 @@ but modules loaded with 'import()' are meant to be asynchronous, so they always 
 1. if you're transpiling js using Babel, you need to install the 'syntax-dynamic-import' plugin, otherwise import() statements will throw an error
 
 2. by default the file names follow the same rules as entry files, except that [name] is replaced with [id]. You can customize this under output.chunkFilename
-	!!! at least according to the documentation but for me it's just replacing all filenames including the entry files ???
+	- at least according to the documentation, but it doesn't seem to be working properly
+	- you can use the extra webpack settings explained in the following section to set the name of individual chunks
+	- the final name may be processed further by the rules defined on the 'splitChunks' settings explained later
 
 ### Asynchronous modules - Extra webpack settings
 Within each import() call you can pass extra parameters that webpack understands.
@@ -400,6 +403,39 @@ you can use variables to dynamically select the modules to load, e.g. import(`./
 
 webpackInclude: regex						include only modules that match the regex
 webpackExclude: regex						exclude modules that match the regex
+
+### Synchronous modules
+If you import a (non asynchronous) module inside different files, its code will be injected on each of the requesting files. For small modules this is good as you reduce the number of necessary server requests, but for bigger modules this becomes an issue as you're substantially increasing the total file size with repeated code.
+
+To create chunks in these cases you can configure the settings in the 'optimization.splitChunks' object:
+*/
+webpackConfig.optimization.splitChunks = {
+	chunks: 'all',							// selects the kind of modules that will follow the rules defined here
+											// async	only async modules. This is the default value
+											// initial	only non-async modules. Note that async modules always generate chunks anyway, they just won't follow the rules defined here
+											// all		all modules
+	// name: true,							// set the file names for the chunks, if set to 'true' the name will be automatically generated
+	// automaticNameDelimiter: '~',			// automatically generated names include the names of all modules contained in the chunk separated by the character defined here
+	minSize: 1,								// the minimum file size required to justify creating a chunk. defaults to 30000
+	minChunks: 1,							// the minimum number of times a module needs be imported to justify creating a chunk for it. defaults to 1
+	maxAsyncRequests: 5,					// not sure lol. defaults to 5 ???
+	maxInitialRequests: 3,					// not sure lol. defaults to 3 ???
+	cacheGroups: {							// defines how many chunks to create and their settings. Keys represent the name of each chunk
+		// the following settings are the ones set by default by webpack, except for the names:
+		vendors: {
+			name: 'modules/vendor',
+			test: /[\\/]node_modules[\\/]/,	// regex that modules should match to be included on the chunk
+			priority: -10,					// chunks that match multiple groups will go to the one with higher priority
+		},
+		default: {
+			name: 'modules/common',
+			minChunks: 2,
+			priority: -20,
+			reuseExistingChunk: true,		// ???
+		},
+	},
+}
+/*
 
 
 Live Reloading / Hot Module Replacement
