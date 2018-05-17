@@ -1,3 +1,4 @@
+import lodash from 'lodash';
 import importedData from './export.js';
 
 // Importing other file types
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	console.log( jsonData );
 	console.log( imageURL );
 	console.log( cssStyles );
+	console.log( lodash.zip( [1, 2], ['one', 'two'], ['uno', 'dos'] ) );
 });
 
 
