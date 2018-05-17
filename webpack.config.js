@@ -152,6 +152,7 @@ const webpackConfig = {
 		rules: [],							// you can add 'module loaders' to run extra tasks (transpile css and js, etc)
 	},
 	plugins: [],							// you can add plugins to further process the generated files
+	optimization: {},						// rules for generating code 'chunks'
 	devServer: {},							// the settings to use when running webpack-dev-server for live reloading/hot module replacement
 	devtool: 'eval',						// how source maps should be generated
 }
@@ -335,6 +336,24 @@ webpackConfig.plugins.push( new htmlWebpackPlugin({
 	title: 'Webpack Reference',
 	template: './src/index.html',
 }) );
+/*
+
+
+Common Chunks
+------------------------------
+https://webpack.js.org/configuration/optimization/
+https://webpack.js.org/plugins/split-chunks-plugin/#optimization-splitchunks
+
+### Webpack Runtime
+All entry files include a copy of the webpack bootstrap code (which makes module loading possible).
+You can choose to output it as a separate file (reduces file size but increases requested files) by setting the 'optimization.runtimeChunk' option:
+
+false										Disabled, does not output as a separate file (default setting)
+true										Enabled, creates a separate file for every single entry file
+'multiple'									Same as 'true'
+'single'									Enabled, creates only one file that all modules will use
+*/
+webpackConfig.optimization.runtimeChunk = 'single';
 /*
 
 
