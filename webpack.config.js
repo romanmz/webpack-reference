@@ -117,7 +117,8 @@ Another alternative is to use JavaScript's ES6 imports, those are not supported 
 but you can run a code transpiler like Babel during the build process to convert the code to a syntax old browsers can recognise.
 
 export default myElement;					exports a single element, you can only call this once per file otherwise you'll get an error
-export {foo, bar, myVar as baz};			exports multiple elements, you can use existing elements and export them with a different name using the 'as' keyword
+export {foo, bar, myVar as baz};			exports multiple elements, you can export elements with a different name using the 'as' keyword.
+											if you call this multiple times, the final exported object will be the result of merging all objects passed on every call
 
 import single from './single.js';			imports a file containing a single element, and creates an alias to refer to it
 single();
@@ -302,6 +303,9 @@ const cssLoader = {
 			loader: 'css-loader',
 			options: {
 				url: false,					// set to false to disable module loading of url() resources
+											// !!! if left as true, the resource urls will be broken if you output the css files to a subfolder instead of the main output folder
+											// !!! if set to false, the resource urls could break if they are pointing to files processed by loaders like file-loader if the file names can change on every build (e.g. hashes)
+											// !!! best practice for now is to set this to false, and make sure any assets loaded from the css have constant file names
 				import: true,				// set to false to disable module loading of @import statements
 				minimize: !devMode,			// set to true to minimze the css code. for extra settings check: http://cssnano.co/guides/presets/
 				sourceMap: devMode,			// set to true to generate source maps (warning: they can be slow and buggy)
@@ -311,6 +315,7 @@ const cssLoader = {
 			loader: 'sass-loader',
 			options: {
 				outputStyle: 'expanded',	// nested*, expanded, compact, compressed
+				sourceMap: devMode,
 			}
 		}
 	],
@@ -318,7 +323,6 @@ const cssLoader = {
 webpackConfig.module.rules.push( cssLoader );
 webpackConfig.plugins.push( new miniCssExtractPlugin({
 	filename: 'css/'+fileNames+'.css',
-	chunkFilename: devMode ? 'css/[id].css' : 'css/[id].[hash].css',
 }) );
 /*
 
