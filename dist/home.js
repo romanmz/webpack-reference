@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! ./src/home1.js */"./src/home1.js");
-module.exports = __webpack_require__(/*! ./src/home2.js */"./src/home2.js");
+__webpack_require__(/*! /Users/roman/Documents/Web/webpack-reference/src/home1.js */"./src/home1.js");
+module.exports = __webpack_require__(/*! /Users/roman/Documents/Web/webpack-reference/src/home2.js */"./src/home2.js");
 
 
 /***/ })
