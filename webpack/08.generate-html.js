@@ -9,12 +9,12 @@ $ npm i --save-dev html-webpack-plugin		auto-generates an html file with the cor
 
 2. Configure webpack:
 */
-module.exports = ({sourceDir, distDir}) => {
-	const cleanWebpackPlugin = require('clean-webpack-plugin');
-	const htmlWebpackPlugin = require('html-webpack-plugin');
+const cleanWebpackPlugin = require('clean-webpack-plugin');
+const htmlWebpackPlugin = require('html-webpack-plugin');
+module.exports = ({rootDir, sourceDir, distDir}) => {
 	return {
 		plugins: [
-			new cleanWebpackPlugin([distDir]),
+			new cleanWebpackPlugin([distDir],{root: rootDir}),
 			new htmlWebpackPlugin({
 				title: 'Webpack Reference',
 				template: sourceDir+'/index.html',

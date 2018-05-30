@@ -62,7 +62,10 @@ If you import a (non asynchronous) module inside different files, its code will 
 
 To create chunks in these cases you can configure the settings in the 'optimization.splitChunks' object:
 */
-module.exports = () => {
+module.exports = ({useHMR}) => {
+	if( useHMR ) {
+		return {};
+	}
 	return {
 		optimization: {
 			runtimeChunk: 'single',

@@ -22,7 +22,7 @@ module.exports = ({sourceDir, distFileNames}) => {
 						loader: 'file-loader',
 						options: {
 							outputPath: 'images',
-							name: distFileNames+'.[ext]',
+							name: '[name].[ext]',
 						}
 					},
 				},
@@ -33,7 +33,7 @@ module.exports = ({sourceDir, distFileNames}) => {
 						loader: 'file-loader',
 						options: {
 							outputPath: 'fonts',
-							name: distFileNames+'.[ext]',
+							name: '[name].[ext]',
 						}
 					},
 				}

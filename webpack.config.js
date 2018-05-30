@@ -35,10 +35,11 @@ module.exports = env => {
 	*/
 	const isDevEnv = process.env.NODE_ENV !== 'production';
 	const useHMR = env && env.useHMR;
-	const sourceDir = __dirname+'/src';
-	const distDir = __dirname+'/dist';
+	const rootDir = __dirname;
+	const sourceDir = rootDir+'/src';
+	const distDir = rootDir+'/dist';
 	const distFileNames = isDevEnv ? '[name]' : '[name].[hash]';
-	const envVars = {isDevEnv, useHMR, sourceDir, distDir, distFileNames};
+	const envVars = {isDevEnv, useHMR, rootDir, sourceDir, distDir, distFileNames};
 	/*
 
 

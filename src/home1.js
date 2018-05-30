@@ -6,3 +6,11 @@ document.addEventListener('DOMContentLoaded', function(){
 		console.log( lodash.default.zip( [1, 2], ['one', 'two'], ['uno', 'dos'] ) );
 	});
 });
+
+
+// HMR
+if( module.hot ) {
+	module.hot.accept( './export.js', ()=>{
+		console.log( 'File updated: export.js' );
+	})
+}
