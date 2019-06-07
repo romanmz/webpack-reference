@@ -26,7 +26,7 @@ module.exports = ({isDevEnv, useHMR, sourceDir, distFileNames}) => {
 															// !!! if set to false, the resource urls could break if they are pointing to files processed by loaders like file-loader if the file names can change on every build (e.g. hashes)
 															// !!! best practice for now is to set this to false, and make sure any assets loaded from the css have constant file names
 								import: true,				// set to false to disable module loading of @import statements
-								minimize: !isDevEnv,		// set to true to minimze the css code. for extra settings check: http://cssnano.co/guides/presets/
+								// minimize: !isDevEnv,		// set to true to minimze the css code. for extra settings check: http://cssnano.co/guides/presets/
 								sourceMap: isDevEnv,		// set to true to generate source maps (warning: they can be slow and buggy)
 							}
 						},
