@@ -17,6 +17,14 @@ When defining the output filenames:
 	[id]									unique module number
 	[query]
 	Documentation: https://webpack.js.org/configuration/output/#output-filename
+
+
+Loading files dynamically
+------------------------------
+You can install and use the 'glob' package to dynamically define the files to be loaded on each entry
+Documentation: https://www.npmjs.com/package/glob
+
+
 */
 module.exports = ({sourceDir, distDir, distFileNames}) => {
 	return {
