@@ -93,6 +93,23 @@ module.exports = ({useHMR}) => {
 						priority: -20,
 						reuseExistingChunk: true,		// ???
 					},
+					/*
+					// you can define chunks that include all files loaded by a particular entry point, and output them to a single file
+					// for example, to output all css from a given entry point:
+					// 1. first add this function at root:
+					function recursiveIssuer(m) {
+						if(m.issuer) return recursiveIssuer(m.issuer);
+						else if(m.name) return m.name;
+						else return false;
+					}
+					// 2. add a cache group using a test function (replace 'entryname'):
+					styles: {
+						name: 'styles',
+						test: (m, c, entry='entryname') => m.constructor.name === 'CssModule' && recursiveIssuer(m) === entry,
+						chunks: 'all',
+						enforce: true,
+					},
+					*/
 				},
 			}
 		}
